@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning - AI Fundamentals | AI Learning Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #10B981;
+            --background: #F9FAFB;
+            --surface: #FFFFFF;
+            --text: #111827;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --success: #10B981;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .navbar {
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn-login {
+            padding: 8px 20px;
+            background: var(--primary);
+            color: white !important;
+            border-radius: 8px;
+        }
+
+        .btn-login:hover {
+            background: var(--primary-dark);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .learning-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+        
+        .sidebar {
+            width: 320px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            position: fixed;
+            top: 70px;
+            bottom: 0;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 320px;
+            padding: 32px;
+        }
+        
+        .video-container {
+            background: #0F172A;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+        
+        .video-placeholder {
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1E293B, #0F172A);
+            color: white;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .video-placeholder i {
+            font-size: 4rem;
+            opacity: 0.5;
+        }
+        
+        .lesson-title {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .lesson-description {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .dashboard-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-card h3 {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dashboard-card ul {
+            list-style-position: inside;
+            color: var(--text-secondary);
+        }
+        
+        .dashboard-card li {
+            margin-bottom: 8px;
+        }
+        
+        .module-list {
+            list-style: none;
+        }
+        
+        .module-item {
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .module-header {
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .module-header:hover {
+            background: var(--background);
+        }
+        
+        .lesson-list {
+            list-style: none;
+            padding-left: 40px;
+            display: none;
+        }
+        
+        .lesson-list.active {
+            display: block;
+        }
+        
+        .lesson-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s ease;
+        }
+        
+        .lesson-item:hover,
+        .lesson-item.active {
+            background: var(--background);
+            color: var(--primary);
+        }
+        
+        .lesson-item.completed {
+            color: var(--success);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-robot" style="color: var(--primary); margin-right: 8px;"></i>
+                <span>AI Learning Platform</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#">Home</a>
+                <a href="#">Dashboard</a>
+                <a href="#">Courses</a>
+                <a href="#">AI Chatbot</a>
+                <a href="#">Progress</a>
+                <a href="#">Profile</a>
+                <a href="#" class="btn-login">Sign Out</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="learning-container">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-book"></i> AI Fundamentals
+            </div>
+            <ul class="module-list">
+                <li class="module-item">
+                    <div class="module-header">
+                        <span>Module 1: Introduction to AI</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <ul class="lesson-list active">
+                        <li class="lesson-item active" data-lesson="1">
+                            <i class="fas fa-play-circle"></i> What is Artificial Intelligence?
+                        </li>
+                        <li class="lesson-item" data-lesson="2">
+                            <i class="fas fa-play-circle"></i> History of AI
+                        </li>
+                        <li class="lesson-item" data-lesson="3">
+                            <i class="fas fa-play-circle"></i> Types of AI Systems
+                        </li>
+                    </ul>
+                </li>
+                <li class="module-item">
+                    <div class="module-header">
+                        <span>Module 2: Machine Learning Basics</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <ul class="lesson-list">
+                        <li class="lesson-item" data-lesson="4">
+                            <i class="fas fa-play-circle"></i> Supervised Learning
+                        </li>
+                        <li class="lesson-item" data-lesson="5">
+                            <i class="fas fa-play-circle"></i> Unsupervised Learning
+                        </li>
+                        <li class="lesson-item" data-lesson="6">
+                            <i class="fas fa-play-circle"></i> Reinforcement Learning
+                        </li>
+                    </ul>
+                </li>
+                <li class="module-item">
+                    <div class="module-header">
+                        <span>Module 3: Neural Networks</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <ul class="lesson-list">
+                        <li class="lesson-item" data-lesson="7">
+                            <i class="fas fa-play-circle"></i> Perceptrons
+                        </li>
+                        <li class="lesson-item" data-lesson="8">
+                            <i class="fas fa-play-circle"></i> Deep Neural Networks
+                        </li>
+                        <li class="lesson-item" data-lesson="9">
+                            <i class="fas fa-play-circle"></i> Backpropagation
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Video Player - What is Artificial Intelligence?</span>
+                </div>
+            </div>
+            
+            <h1 class="lesson-title">What is Artificial Intelligence?</h1>
+            <p class="lesson-description">Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn. This lesson covers the fundamental concepts, applications, and future of AI technology.</p>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="markCompleteBtn">Mark as Complete</button>
+                <button class="btn btn-outline" id="nextLessonBtn">Next Lesson →</button>
+            </div>
+            
+            <div class="dashboard-card">
+                <h3><i class="fas fa-lightbulb"></i> Key Takeaways</h3>
+                <ul style="margin-top: 16px; list-style-position: inside; color: var(--text-secondary);">
+                    <li>AI enables machines to perform tasks that typically require human intelligence</li>
+                    <li>Key subfields include machine learning, natural language processing, and computer vision</li>
+                    <li>AI applications range from virtual assistants to autonomous vehicles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        const sidebar = document.getElementById('sidebar');
+        
+        mobileMenuBtn?.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            sidebar.classList.toggle('open');
+        });
+        
+        // Module toggle functionality
+        document.querySelectorAll('.module-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const lessonList = header.nextElementSibling;
+                lessonList.classList.toggle('active');
+                const icon = header.querySelector('i:last-child');
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            });
+        });
+        
+        // Lesson navigation
+        const lessons = {
+            1: {
+                title: 'What is Artificial Intelligence?',
+                description: 'Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn. This lesson covers the fundamental concepts, applications, and future of AI technology.',
+                videoTitle: 'What is Artificial Intelligence?'
+            },
+            2: {
+                title: 'History of AI',
+                description: 'Explore the fascinating journey of AI from its conceptual beginnings in the 1950s to modern breakthroughs. Learn about key milestones, AI winters, and the factors that led to today\'s AI revolution.',
+                videoTitle: 'History of AI'
+            },
+            3: {
+                title: 'Types of AI Systems',
+                description: 'Discover the different types of AI systems including Narrow AI, General AI, and Super AI. Learn about reactive machines, limited memory AI, theory of mind, and self-aware AI.',
+                videoTitle: 'Types of AI Systems'
+            },
+            4: {
+                title: 'Supervised Learning',
+                description: 'Supervised learning is a type of machine learning where models are trained on labeled data. Learn about classification, regression, and real-world applications.',
+                videoTitle: 'Supervised Learning'
+            },
+            5: {
+                title: 'Unsupervised Learning',
+                description: 'Unsupervised learning finds patterns in unlabeled data. Explore clustering, dimensionality reduction, and association algorithms.',
+                videoTitle: 'Unsupervised Learning'
+            },
+            6: {
+                title: 'Reinforcement Learning',
+                description: 'Reinforcement learning teaches agents to make decisions through trial and error. Learn about rewards, policies, and value functions.',
+                videoTitle: 'Reinforcement Learning'
+            },
+            7: {
+                title: 'Perceptrons',
+                description: 'Perceptrons are the building blocks of neural networks. Understand how these simple algorithms form the foundation of deep learning.',
+                videoTitle: 'Perceptrons'
+            },
+            8: {
+                title: 'Deep Neural Networks',
+                description: 'Deep neural networks use multiple layers to learn hierarchical representations. Explore architectures like CNNs and RNNs.',
+                videoTitle: 'Deep Neural Networks'
+            },
+            9: {
+                title: 'Backpropagation',
+                description: 'Backpropagation is the algorithm that enables neural networks to learn. Understand how gradients flow through networks to update weights.',
+                videoTitle: 'Backpropagation'
+            }
+        };
+        
+        let currentLesson = 1;
+        
+        // Function to update lesson content
+        function updateLesson(lessonId) {
+            const lesson = lessons[lessonId];
+            if (lesson) {
+                document.querySelector('.lesson-title').textContent = lesson.title;
+                document.querySelector('.lesson-description').textContent = lesson.description;
+                const videoPlaceholder = document.querySelector('.video-placeholder');
+                videoPlaceholder.innerHTML = `
+                    <i class="fas fa-play-circle"></i>
+                    <span>Video Player - ${lesson.videoTitle}</span>
+                `;
+            }
+        }
+        
+        // Lesson click handler
+        document.querySelectorAll('.lesson-item').forEach((item, index) => {
+            item.addEventListener('click', function() {
+                // Remove active class from all lessons
+                document.querySelectorAll('.lesson-item').forEach(lesson => {
+                    lesson.classList.remove('active');
+                });
+                
+                // Add active class to clicked lesson
+                this.classList.add('active');
+                
+                // Get lesson number
+                const lessonId = parseInt(this.getAttribute('data-lesson'));
+                currentLesson = lessonId;
+                
+                // Update main content
+                updateLesson(lessonId);
+            });
+        });
+        
+        // Mark as complete functionality
+        document.getElementById('markCompleteBtn')?.addEventListener('click', function() {
+            const activeLesson = document.querySelector('.lesson-item.active');
+            if (activeLesson) {
+                if (!activeLesson.classList.contains('completed')) {
+                    activeLesson.classList.add('completed');
+                    const icon = activeLesson.querySelector('i');
+                    icon.classList.remove('fa-play-circle');
+                    icon.classList.add('fa-check-circle');
+                    alert('✓ Lesson marked as complete! Progress saved.');
+                } else {
+                    alert('This lesson is already completed!');
+                }
+            }
+        });
+        
+        // Next lesson functionality
+        document.getElementById('nextLessonBtn')?.addEventListener('click', function() {
+            const currentActive = document.querySelector('.lesson-item.active');
+            const allLessons = Array.from(document.querySelectorAll('.lesson-item'));
+            const currentIndex = allLessons.indexOf(currentActive);
+            
+            if (currentIndex < allLessons.length - 1) {
+                const nextLesson = allLessons[currentIndex + 1];
+                nextLesson.click();
+                
+                // Scroll to next lesson in sidebar
+                nextLesson.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                alert('Congratulations! You have completed all lessons in this course! 🎉');
+            }
+        });
+        
+        // Load saved progress from localStorage
+        function loadProgress() {
+            const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
+            completedLessons.forEach(lessonId => {
+                const lesson = document.querySelector(`.lesson-item[data-lesson="${lessonId}"]`);
+                if (lesson && !lesson.classList.contains('completed')) {
+                    lesson.classList.add('completed');
+                    const icon = lesson.querySelector('i');
+                    icon.classList.remove('fa-play-circle');
+                    icon.classList.add('fa-check-circle');
+                }
+            });
+        }
+        
+        // Save progress to localStorage
+        function saveProgress(lessonId) {
+            let completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
+            if (!completedLessons.includes(lessonId)) {
+                completedLessons.push(lessonId);
+                localStorage.setItem('completedLessons', JSON.stringify(completedLessons));
+            }
+        }
+        
+        // Modified mark as complete with save
+        const originalMarkComplete = document.getElementById('markCompleteBtn').click;
+        document.getElementById('markCompleteBtn').addEventListener('click', function() {
+            const activeLesson = document.querySelector('.lesson-item.active');
+            if (activeLesson && !activeLesson.classList.contains('completed')) {
+                const lessonId = activeLesson.getAttribute('data-lesson');
+                saveProgress(lessonId);
+            }
+        });
+        
+        // Load saved progress on page load
+        loadProgress();
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768) {
+                const isClickInsideNav = navLinks.contains(event.target);
+                const isClickOnMenuBtn = mobileMenuBtn.contains(event.target);
+                
+                if (!isClickInsideNav && !isClickOnMenuBtn && navLinks.classList.contains('show')) {
+                    navLinks.classList.remove('show');
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
